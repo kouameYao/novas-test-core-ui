@@ -7,19 +7,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'admin.api-stg.paynah.com',
-        port: '',
-        pathname: '/**'
-      },
-      {
-        protocol: 'https',
-        hostname: 'api.paynah.com',
-        port: '',
-        pathname: '/**'
-      },
-      {
-        protocol: 'https',
-        hostname: 'cdn.paynah.com',
+        hostname: 'novasend.app',
         port: '',
         pathname: '/**'
       }
