@@ -1,0 +1,18 @@
+appName: paynah-b2c
+replicas: 1
+containerPort: 3000
+
+image:
+  repository: 043358453874.dkr.ecr.eu-west-2.amazonaws.com/paynah-b2c
+  tag: develop
+
+ingress:
+  host: app-dev.paynah.com
+
+resources:
+  requests:
+    cpu: 200m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
