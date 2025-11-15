@@ -1,26 +1,13 @@
-export { SegmentedControl } from './segmented-control';
-
 export { Button } from './button';
 export { Input } from './input';
 export { Switch } from './switch';
 export { RadioGroup, RadioGroupItem } from './radio-group';
 export { Card } from './card';
 export { Badge } from './badge';
-export { Avatar } from './avatar';
-export { Checkbox } from './checkbox';
 export { Dialog } from './dialog';
-export { DropdownMenu } from './dropdown-menu';
 export { Form } from './form';
 export { Label } from './label';
-export { Popover } from './popover';
 export { Select } from './select';
 export { Separator } from './separator';
 export { Sheet } from './sheet';
-export { Skeleton } from './skeleton';
-export { Slider } from './slider';
-export { Table } from './table';
-export { Tabs } from './tabs';
 export { Textarea } from './textarea';
-export { Toggle } from './toggle';
-export { ToggleGroup } from './toggle-group';
-export { Tooltip } from './tooltip';

@@ -6,8 +6,6 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
-// import { ArrowBack } from './arrow-back';
-// import { StepsCardHeader } from './steps-card-header';
 import { StepsCardProps } from './types';
 
 export const StepsCard: React.FC<StepsCardProps> = ({
@@ -33,18 +31,6 @@ export const StepsCard: React.FC<StepsCardProps> = ({
         containerClassName
       )}
     >
-      {/* <ArrowBack
-        className="mr-3 mb-0 flex md:hidden"
-        handleOnClick={onBackButtonClick}
-      /> */}
-
-      {/* <div className={cn('', stepperClassName)}>
-        <StepsCardHeader
-          currentStep={currentStep}
-          onBackButtonClick={onBackButtonClick}
-        />
-      </div> */}
-
       <motion.div
         className={cn(
           'bg-white rounded-4xl p-8 flex flex-col min-h-[70vh] max-h-[80vh] overflow-y-auto',

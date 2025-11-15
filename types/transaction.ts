@@ -238,7 +238,7 @@ export const transactions: Transaction[] = [
     remainingBalance: 469374,
     transaction_type: {
       id: '9268b8ab-61ea-4dcc-9821-d3df01cd24ba',
-      name: 'PAYOUT',
+      name: 'PAYIN',
       createdAt: '2023-10-19T11:32:53.863Z',
       updatedAt: '2023-10-19T11:32:53.863Z',
       deletedAt: null
