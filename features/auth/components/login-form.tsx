@@ -50,7 +50,7 @@ export const LoginForm: React.FC = () => {
 
   const onSubmit = (data: LoginFormData) => {
     console.log('Login data:', data);
-    router.push(`/fr/dashboard`);
+    router.push(`/dashboard`);
     toast.success('Connexion réussie', {
       description: 'Tu es maintenant connecté à ton compte',
       duration: 5000

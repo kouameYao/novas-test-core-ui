@@ -15,7 +15,7 @@ export default function NotFound() {
             Contactez l&apos;administrateur de la plateforme au cas où vous
             cherchez quelque chose de particulier
           </p>
-          <Link href={'/fr/dashboard'}>
+          <Link href={'/dashboard'}>
             <Button className="mt-8 px-4 xl:px-6">
               <LayoutPanelLeft className="mr-1.5 text-lg" />
               Retour à l&apos;accueuil

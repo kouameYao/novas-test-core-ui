@@ -28,12 +28,12 @@ export function TransactionItem({
       <td className="py-3 px-4 md:pl-6 rounded-l-xl">
         <div className="flex items-center gap-3">
           <div>
-            <p className="text-sm font-medium text-black">
+            <p className="text-base font-medium text-black">
               {transaction.transaction_type.name === 'PAYOUT'
                 ? 'Dépôt'
                 : 'Retrait'}
             </p>
-            <p className="text-xs text-gray-100">
+            <p className="text-sm text-gray-100">
               {formatDate(transaction.dateOperation)}
             </p>
           </div>

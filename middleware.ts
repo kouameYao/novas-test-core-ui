@@ -1,24 +1,21 @@
-import { type NextRequest } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 import { createI18nMiddleware } from 'next-international/middleware';
 
 const I18nMiddleware = createI18nMiddleware({
   locales: ['en', 'fr'],
-  defaultLocale: 'en',
+  defaultLocale: 'fr',
   urlMappingStrategy: 'rewrite'
 });
 
-const publicPaths = [
-  '/login',
-  '/register',
-  '/signup',
-  '/forgot-password',
-  '/reset-password',
-  '/accept-invitation',
-  '/check-email'
-];
+const publicPaths = ['/login'];
 
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
+
+  // Rediriger la route racine vers /dashboard
+  if (pathname === '/') {
+    return NextResponse.redirect(new URL('/dashboard', request.url));
+  }
 
   // Vérifier si le chemin est public (avec ou sans locale)
   // Avec urlMappingStrategy: 'rewrite', les URLs peuvent être /login ou /fr/login
