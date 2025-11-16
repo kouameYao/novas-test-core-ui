@@ -15,10 +15,13 @@ import {
   DialogHeader,
   DialogTitle
 } from '@/components/ui/dialog';
-import { getBalance, getStatement } from '@/features/top-up/api/account-api';
-import { DepositModal } from '@/features/top-up/components/deposit-modal';
-import { StatementTable } from '@/features/top-up/components/statement-table';
-import { WithdrawModal } from '@/features/top-up/components/withdraw-modal';
+import {
+  getBalance,
+  getStatement
+} from '@/features/operations/api/account-api';
+import { DepositModal } from '@/features/operations/components/deposit-modal';
+import { StatementTable } from '@/features/operations/components/statement-table';
+import { WithdrawModal } from '@/features/operations/components/withdraw-modal';
 import { formatNumber } from '@/utils/format-number';
 
 export function BalanceSection() {
@@ -140,11 +143,11 @@ export function BalanceSection() {
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-wrap gap-2">
             <Button
               variant="outline"
               size="lg"
-              className="gap-2 px-2 pr-3 bg-primary hover:bg-primary/90 rounded-full"
+              className="gap-2 px-2 pr-3 bg-primary  text-white hover:text-white hover:bg-primary/90 rounded-full"
               style={{
                 background:
                   'linear-gradient(86deg, #22C629 -17.37%, #CEFE21 146.69%)'
@@ -165,6 +168,10 @@ export function BalanceSection() {
               size="lg"
               className="gap-2 px-2 pr-3 bg-red-600 hover:bg-red-700 text-white hover:text-white rounded-full"
               onClick={() => setWithdrawOpen(true)}
+              style={{
+                background:
+                  'linear-gradient(86deg, #DC2626 -17.37%, #F3B01D 146.69%)'
+              }}
             >
               <Image
                 src="https://novasend.app/_next/static/media/arrow_downward.0abf9168.svg"
@@ -179,8 +186,12 @@ export function BalanceSection() {
             <Button
               size="lg"
               variant="outline"
-              className="gap-2 px-2 pr-3 bg-[#EBEBEB] rounded-full"
+              className="gap-2 px-2 pr-3 bg-[#EBEBEB] text-white hover:text-white rounded-full"
               onClick={() => setStatementOpen(true)}
+              style={{
+                background:
+                  'linear-gradient(86deg, #000000 -17.37%, #707070 146.69%)'
+              }}
             >
               <Image
                 src="/icons/hub.svg"
@@ -194,12 +205,12 @@ export function BalanceSection() {
           </div>
         </Card>
 
-        <div className="flex items-center justify-center">
+        <div className="hidden sm:flex items-center justify-center">
           <Image
             src="https://novasend.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fqrcode.cfb9d9d3.png&w=256&q=75"
             alt="relevé de compte"
-            width={220}
-            height={220}
+            width={150}
+            height={150}
             className="flex p-1 items-center justify-center"
           />
         </div>

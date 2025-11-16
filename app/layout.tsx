@@ -7,11 +7,10 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: {
-    default: 'Paynah B2C - Système de paiement en ligne',
-    template: '%s | Paynah B2C'
+    default: 'Novaspace - Système de paiement en ligne',
+    template: '%s | Novaspace'
   },
-  description:
-    'Paynah B2C est une solution de paiement en ligne sécurisée qui permet aux entreprises de traiter les transactions de manière fiable et efficace. Intégrez facilement nos services de paiement dans votre plateforme et offrez à vos clients une expérience de paiement fluide et sécurisée.'
+  description: 'Novaspace est une solution de paiement en ligne'
 };
 
 export default function RootLayout({
