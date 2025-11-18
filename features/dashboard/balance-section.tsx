@@ -1,6 +1,6 @@
 'use client';
 
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { Eye, EyeOff } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
@@ -29,70 +29,29 @@ export function BalanceSection() {
   const [depositOpen, setDepositOpen] = useState(false);
   const [withdrawOpen, setWithdrawOpen] = useState(false);
   const [statementOpen, setStatementOpen] = useState(false);
-  const queryClient = useQueryClient();
 
-  // Récupération du solde
   const { data: balance, isLoading: balanceLoading } = useQuery({
     queryKey: ['account-balance'],
     queryFn: getBalance
   });
 
-  // Récupération du relevé
   const { data: statement, isLoading: statementLoading } = useQuery({
     queryKey: ['account-statement'],
     queryFn: getStatement,
-    enabled: statementOpen // Charger seulement quand le modal est ouvert
+    enabled: statementOpen,
+    retry: 1
   });
 
-  // Mutation pour rafraîchir les données après une opération
-  const refreshData = useMutation({
-    mutationFn: async () => {
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ['account-balance'] }),
-        queryClient.invalidateQueries({ queryKey: ['account-statement'] })
-      ]);
-    }
-  });
-
-  const handleDepositSuccess = async () => {
-    try {
-      await refreshData.mutateAsync();
-      toast.success('Dépôt effectué avec succès', {
-        description: 'Votre solde a été mis à jour'
-      });
-    } catch (error) {
-      toast.error('Erreur lors du dépôt', {
-        description:
-          error instanceof Error ? error.message : 'Une erreur est survenue'
-      });
-    }
+  const handleDepositSuccess = () => {
+    toast.success('Dépôt effectué avec succès', {
+      description: 'Votre solde a été mis à jour'
+    });
   };
 
-  const handleWithdrawSuccess = async () => {
-    try {
-      await refreshData.mutateAsync();
-      toast.success('Retrait effectué avec succès', {
-        description: 'Votre solde a été mis à jour'
-      });
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Une erreur est survenue';
-
-      if (errorMessage.includes('solde insuffisant')) {
-        toast.error('Solde insuffisant', {
-          description:
-            'Vous ne disposez pas de fonds suffisants pour effectuer ce retrait'
-        });
-      } else if (errorMessage.includes('montant négatif')) {
-        toast.error('Montant invalide', {
-          description: 'Le montant ne peut pas être négatif'
-        });
-      } else {
-        toast.error('Erreur lors du retrait', {
-          description: errorMessage
-        });
-      }
-    }
+  const handleWithdrawSuccess = () => {
+    toast.success('Retrait effectué avec succès', {
+      description: 'Votre solde a été mis à jour'
+    });
   };
 
   const currentBalance = balance?.balance || 0;
@@ -194,7 +153,7 @@ export function BalanceSection() {
               }}
             >
               <Image
-                src="/icons/hub.svg"
+                src="/icons/transaction.svg"
                 alt="relevé de compte"
                 width={18}
                 height={18}
@@ -231,7 +190,7 @@ export function BalanceSection() {
 
       <Dialog open={statementOpen} onOpenChange={setStatementOpen}>
         <DialogContent className="max-w-4xl min-h-[50vh] overflow-y-auto  sm:rounded-[2rem]">
-          <DialogHeader>
+          <DialogHeader className="pb-4 -space-y-1">
             <DialogTitle className="text-[1.6875rem] font-medium">
               Relevé de compte
             </DialogTitle>
@@ -240,7 +199,7 @@ export function BalanceSection() {
             </DialogDescription>
           </DialogHeader>
           <StatementTable
-            entries={statement?.entries || []}
+            entries={statement || []}
             statementLoading={statementLoading}
           />
         </DialogContent>

@@ -4,13 +4,16 @@ export type LoginCredentials = {
 };
 
 export type LoginResponse = {
-  token: string;
+  access_token: string;
   user: {
     id: string;
     email: string;
-    firstName?: string;
-    lastName?: string;
+    role: string;
   };
+  bankAccountId: string;
+  email: string;
+  id: string;
+  role: string;
 };
 
 export type PhoneLoginFormData = {

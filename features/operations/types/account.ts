@@ -25,16 +25,8 @@ export interface WithdrawResponse {
   message?: string;
 }
 
-export interface StatementEntry {
-  id: string;
+export interface Statement {
   date: string;
   amount: number;
   balance: number;
-  type: 'deposit' | 'withdraw';
-  description?: string;
-}
-
-export interface StatementResponse {
-  entries: StatementEntry[];
-  totalEntries: number;
 }

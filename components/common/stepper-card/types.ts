@@ -5,7 +5,6 @@ export interface StepsCardProps {
   subtitle2?: string;
   children: React.ReactNode;
   buttonText?: string;
-  onButtonClick?: () => void;
   hasBottomContent?: boolean;
   hasLoginLink?: boolean;
   className?: string;

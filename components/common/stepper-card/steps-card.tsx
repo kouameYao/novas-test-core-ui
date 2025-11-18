@@ -15,7 +15,6 @@ export const StepsCard: React.FC<StepsCardProps> = ({
   subtitle2,
   children,
   buttonText = 'Continuer',
-  onButtonClick = undefined,
   hasBottomContent = true,
   hasLoginLink = true,
   className,
@@ -76,7 +75,7 @@ export const StepsCard: React.FC<StepsCardProps> = ({
               </div>
             )}
             <Button
-              onClick={onButtonClick}
+              type="submit"
               className="w-full mt-6 md:mt-8 bg-black text-white font-bold py-6 rounded-3xl hover:bg-gray-800"
             >
               {buttonText}

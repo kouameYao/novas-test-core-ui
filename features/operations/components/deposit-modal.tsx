@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -45,7 +45,7 @@ export function DepositModal({
   onOpenChange,
   onSuccess
 }: DepositModalProps) {
-  const [isLoading, setIsLoading] = useState(false);
+  const queryClient = useQueryClient();
 
   const form = useForm<DepositFormData>({
     resolver: zodResolver(depositSchema),
@@ -54,20 +54,27 @@ export function DepositModal({
     }
   });
 
-  const onSubmit = async (data: DepositFormData) => {
-    setIsLoading(true);
-    try {
-      const amount = parseAmount(data.amount);
-      await deposit({ amount });
+  const depositMutation = useMutation({
+    mutationFn: async (amount: number) => {
+      return await deposit({ amount });
+    },
+    onSuccess: async () => {
+      // Invalider les queries pour rafraîchir les données
+      await queryClient.invalidateQueries({ queryKey: ['account-balance'] });
+      await queryClient.invalidateQueries({ queryKey: ['account-statement'] });
       form.reset();
       await onSuccess();
       onOpenChange(false);
-    } catch (error) {
+    },
+    onError: (error) => {
       console.error('Erreur lors du dépôt:', error);
       // L'erreur sera gérée par le composant parent avec un toast
-      setIsLoading(false);
-      // Ne pas fermer le modal en cas d'erreur
     }
+  });
+
+  const onSubmit = async (data: DepositFormData) => {
+    const amount = parseAmount(data.amount);
+    depositMutation.mutate(amount);
   };
 
   return (
@@ -99,13 +106,20 @@ export function DepositModal({
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => onOpenChange(false)}
-                disabled={isLoading}
+                onClick={() => {
+                  form.reset();
+                  onOpenChange(false);
+                }}
+                disabled={depositMutation.isPending}
               >
                 Annuler
               </Button>
-              <Button type="submit" disabled={isLoading} size="lg">
-                {isLoading ? 'En cours...' : 'Valider'}
+              <Button
+                type="submit"
+                disabled={depositMutation.isPending}
+                size="lg"
+              >
+                {depositMutation.isPending ? 'En cours...' : 'Valider'}
               </Button>
             </div>
           </form>
