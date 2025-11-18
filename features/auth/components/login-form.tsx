@@ -2,7 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -17,8 +17,8 @@ import {
   FormMessage
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { registrationSteps } from '@/features/auth/constants';
-import { useSteps } from '@/providers/steps-provider';
+import { login } from '@/features/auth/api/auth-api';
+import { useAuthStore } from '@/store/auth-store';
 
 const loginSchema = z.object({
   email: z.string().email('Email invalide').min(1, 'Email requis'),
@@ -30,10 +30,11 @@ const loginSchema = z.object({
 type LoginFormData = z.infer<typeof loginSchema>;
 
 export const LoginForm: React.FC = () => {
-  const { currentStep, setSteps } = useSteps();
   const router = useRouter();
+  const setAuth = useAuthStore((state) => state.setAuth);
 
   const [showPassword, setShowPassword] = React.useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const loginForm = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -44,38 +45,58 @@ export const LoginForm: React.FC = () => {
     }
   });
 
-  useEffect(() => {
-    setSteps(registrationSteps);
-  }, [setSteps]);
+  const onSubmit = async (data: LoginFormData) => {
+    console.log('data', data);
 
-  const onSubmit = (data: LoginFormData) => {
-    console.log('Login data:', data);
-    router.push(`/dashboard`);
-    toast.success('Connexion réussie', {
-      description: 'Tu es maintenant connecté à ton compte',
-      duration: 5000
-    });
-  };
+    setIsLoading(true);
+    try {
+      const response = await login({
+        email: data.email,
+        password: data.password
+      });
 
-  const handleContinue = () => {
-    loginForm.handleSubmit(onSubmit)();
+      console.log('response', response);
+
+      if (response.access_token && response.user) {
+        const user = {
+          id: response.user.id,
+          email: response.user.email,
+          name: response.user.email.split('@')[0],
+          role: response.user.role,
+          bankAccountId: response.bankAccountId
+        };
+        setAuth(user, response.access_token);
+      }
+
+      router.push(`/dashboard`);
+      toast.success('Connexion réussie', {
+        description: 'Tu es maintenant connecté à ton compte',
+        duration: 5000
+      });
+    } catch (error) {
+      toast.error('Erreur de connexion', {
+        description:
+          error instanceof Error
+            ? error.message
+            : 'Une erreur est survenue lors de la connexion',
+        duration: 5000
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <StepsCard
-        title="Connecte-toi à ton compte"
-        subtitle1="Commence par saisir ton email et ton mot de passe"
-        subtitle2="pour te connecter à ton compte"
-        buttonText="Se connecter"
-        currentStep={currentStep}
-        onButtonClick={loginForm.formState.isValid ? handleContinue : undefined}
-        hasLoginLink={false}
-      >
-        <Form {...loginForm}>
-          <form
-            onSubmit={loginForm.handleSubmit(onSubmit)}
-            className="space-y-6"
+    <Form {...loginForm}>
+      <form onSubmit={loginForm.handleSubmit(onSubmit)} className="space-y-6">
+        <div className="max-w-4xl mx-auto">
+          <StepsCard
+            title="Connecte-toi à ton compte"
+            subtitle1="Commence par saisir ton email et ton mot de passe"
+            subtitle2="pour te connecter à ton compte"
+            buttonText={isLoading ? 'Connexion...' : 'Se connecter'}
+            currentStep={1}
+            hasLoginLink={false}
           >
             <div className="space-y-6">
               <FormField
@@ -158,9 +179,9 @@ export const LoginForm: React.FC = () => {
                 )}
               />
             </div>
-          </form>
-        </Form>
-      </StepsCard>
-    </div>
+          </StepsCard>
+        </div>
+      </form>
+    </Form>
   );
 };

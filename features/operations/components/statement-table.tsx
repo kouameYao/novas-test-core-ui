@@ -3,10 +3,10 @@
 import { formatDate } from '@/utils/format-date';
 import { formatNumber } from '@/utils/format-number';
 
-import { StatementEntry } from '../types/account';
+import { Statement } from '../types/account';
 
 interface StatementTableProps {
-  entries: StatementEntry[];
+  entries: Statement[];
   statementLoading?: boolean;
 }
 
@@ -21,6 +21,8 @@ export function StatementTable({
       </div>
     );
   }
+
+  console.log('entries', entries);
 
   // Trier par date décroissante (plus récent en premier)
   const sortedEntries = [...entries].sort((a, b) => {
@@ -51,10 +53,12 @@ export function StatementTable({
           </tr>
         </thead>
         <tbody>
-          {sortedEntries.map((entry) => {
-            const isDeposit = entry.type === 'deposit';
+          {sortedEntries.map((entry, index) => {
+            const isDeposit = entry.amount > 0;
+            // const isWithdraw = entry.amount < 0;
+
             return (
-              <tr key={entry.id} className="border-b hover:bg-muted/30">
+              <tr key={index} className="border-b hover:bg-muted/30">
                 <td className="px-4 py-3 text-sm">{formatDate(entry.date)}</td>
                 <td className="px-4 py-3 text-sm">
                   <span

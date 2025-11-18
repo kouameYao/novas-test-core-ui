@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 
+import { PublicGuard } from '@/components/auth/public-guard';
 import { LoginForm } from '@/features/auth/components/login-form';
 
 export const metadata: Metadata = {
@@ -7,5 +8,9 @@ export const metadata: Metadata = {
 };
 
 export default async function LoginPage() {
-  return <LoginForm />;
+  return (
+    <PublicGuard>
+      <LoginForm />
+    </PublicGuard>
+  );
 }

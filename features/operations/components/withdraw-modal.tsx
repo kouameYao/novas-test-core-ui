@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -47,7 +47,7 @@ export function WithdrawModal({
   onSuccess,
   currentBalance
 }: WithdrawModalProps) {
-  const [isLoading, setIsLoading] = useState(false);
+  const queryClient = useQueryClient();
 
   const form = useForm<WithdrawFormData>({
     resolver: zodResolver(withdrawSchema),
@@ -56,26 +56,19 @@ export function WithdrawModal({
     }
   });
 
-  const onSubmit = async (data: WithdrawFormData) => {
-    setIsLoading(true);
-    try {
-      const amount = parseAmount(data.amount);
-
-      // Vérification côté client du solde insuffisant
-      if (currentBalance !== undefined && amount > currentBalance) {
-        form.setError('amount', {
-          type: 'manual',
-          message: 'Solde insuffisant'
-        });
-        setIsLoading(false);
-        return;
-      }
-
-      await withdraw({ amount });
+  const withdrawMutation = useMutation({
+    mutationFn: async (amount: number) => {
+      return await withdraw({ amount });
+    },
+    onSuccess: async () => {
+      // Invalider les queries pour rafraîchir les données
+      await queryClient.invalidateQueries({ queryKey: ['account-balance'] });
+      await queryClient.invalidateQueries({ queryKey: ['account-statement'] });
       form.reset();
       await onSuccess();
       onOpenChange(false);
-    } catch (error) {
+    },
+    onError: (error) => {
       console.error('Erreur lors du retrait:', error);
       const errorMessage =
         error instanceof Error ? error.message : 'Erreur lors du retrait';
@@ -98,9 +91,22 @@ export function WithdrawModal({
         });
       }
       // L'erreur sera également gérée par le composant parent avec un toast
-      setIsLoading(false);
-      // Ne pas fermer le modal en cas d'erreur
     }
+  });
+
+  const onSubmit = async (data: WithdrawFormData) => {
+    const amount = parseAmount(data.amount);
+
+    // Vérification côté client du solde insuffisant
+    if (currentBalance !== undefined && amount > currentBalance) {
+      form.setError('amount', {
+        type: 'manual',
+        message: 'Solde insuffisant'
+      });
+      return;
+    }
+
+    withdrawMutation.mutate(amount);
   };
 
   return (
@@ -142,13 +148,20 @@ export function WithdrawModal({
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => onOpenChange(false)}
-                disabled={isLoading}
+                onClick={() => {
+                  form.reset();
+                  onOpenChange(false);
+                }}
+                disabled={withdrawMutation.isPending}
               >
                 Annuler
               </Button>
-              <Button type="submit" disabled={isLoading} size="lg">
-                {isLoading ? 'En cours...' : 'Valider'}
+              <Button
+                type="submit"
+                disabled={withdrawMutation.isPending}
+                size="lg"
+              >
+                {withdrawMutation.isPending ? 'En cours...' : 'Valider'}
               </Button>
             </div>
           </form>

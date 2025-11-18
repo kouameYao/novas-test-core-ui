@@ -1,36 +1,50 @@
-import { ApiResponse } from '@/types/api-response';
+'use client';
+
+import { getAuthToken } from '@/lib/get-auth-token';
 
 import type {
   AccountBalance,
   DepositRequest,
   DepositResponse,
-  StatementResponse,
+  Statement,
   WithdrawRequest,
   WithdrawResponse
 } from '../types/account';
 
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || 'https://admin.api-stg.paynah.com/api/v1';
-
-/**
- * Récupère le solde actuel du compte
- */
 export async function getBalance(): Promise<AccountBalance> {
-  const response = await fetch(`${API_BASE_URL}/statement`, {
+  const token = getAuthToken();
+  const headers: HeadersInit = {
+    'Content-Type': 'application/json'
+  };
+
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+  const response = await fetch('/api/bank-account/balance', {
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-      // TODO: Ajouter le token d'authentification
-      // Authorization: `Bearer ${token}`
-    }
+    headers
   });
 
   if (!response.ok) {
-    throw new Error('Erreur lors de la récupération du solde');
+    const error = await response.json().catch(() => ({}));
+    throw new Error(error.error || 'Erreur lors de la récupération du solde');
   }
 
-  const data: ApiResponse<AccountBalance> = await response.json();
-  return data.data;
+  const data = await response.json();
+
+  console.log('data', data);
+
+  if (data) {
+    return data as AccountBalance;
+  }
+
+  if (data && typeof data === 'object' && 'balance' in data) {
+    return data as AccountBalance;
+  }
+
+  // Valeur par défaut si la structure n'est pas reconnue
+  throw new Error("Format de réponse inattendu de l'API");
 }
 
 /**
@@ -39,22 +53,35 @@ export async function getBalance(): Promise<AccountBalance> {
 export async function deposit(
   request: DepositRequest
 ): Promise<DepositResponse> {
-  const response = await fetch(`${API_BASE_URL}/deposit`, {
+  const token = getAuthToken();
+  const headers: HeadersInit = {
+    'Content-Type': 'application/json'
+  };
+
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+  const response = await fetch('/api/bank-account/deposit', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-      // TODO: Ajouter le token d'authentification
-    },
+    headers,
     body: JSON.stringify(request)
   });
 
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || 'Erreur lors du dépôt');
+    const error = await response.json().catch(() => ({}));
+    throw new Error(error.error || 'Erreur lors du dépôt');
   }
 
-  const data: ApiResponse<DepositResponse> = await response.json();
-  return data.data;
+  const data = await response.json();
+
+  // Vérifier si la réponse est encapsulée dans ApiResponse
+  if (data.data && typeof data.data === 'object') {
+    return data.data as DepositResponse;
+  }
+
+  // Sinon, retourner directement la réponse
+  return data as DepositResponse;
 }
 
 /**
@@ -63,41 +90,63 @@ export async function deposit(
 export async function withdraw(
   request: WithdrawRequest
 ): Promise<WithdrawResponse> {
-  const response = await fetch(`${API_BASE_URL}/withdraw`, {
+  const token = getAuthToken();
+  const headers: HeadersInit = {
+    'Content-Type': 'application/json'
+  };
+
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+  const response = await fetch('/api/bank-account/withdraw', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-      // TODO: Ajouter le token d'authentification
-    },
+    headers,
     body: JSON.stringify(request)
   });
 
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || 'Erreur lors du retrait');
+    const error = await response.json().catch(() => ({}));
+    throw new Error(error.error || 'Erreur lors du retrait');
   }
 
-  const data: ApiResponse<WithdrawResponse> = await response.json();
-  return data.data;
+  const data = await response.json();
+
+  // Vérifier si la réponse est encapsulée dans ApiResponse
+  if (data.data && typeof data.data === 'object') {
+    return data.data as WithdrawResponse;
+  }
+
+  // Sinon, retourner directement la réponse
+  return data as WithdrawResponse;
 }
 
 /**
  * Récupère le relevé bancaire
  */
-export async function getStatement(): Promise<StatementResponse> {
-  const response = await fetch(`${API_BASE_URL}/statement`, {
+export async function getStatement(): Promise<Statement[]> {
+  const token = getAuthToken();
+  const headers: HeadersInit = {
+    'Content-Type': 'application/json'
+  };
+
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+  const response = await fetch('/api/bank-account/statement', {
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-      // TODO: Ajouter le token d'authentification
-    }
+    headers
   });
 
   if (!response.ok) {
-    throw new Error('Erreur lors de la récupération du relevé');
+    const error = await response.json().catch(() => ({}));
+    throw new Error(error.error || 'Erreur lors de la récupération du relevé');
   }
 
-  const data: ApiResponse<StatementResponse> = await response.json();
-  return data.data;
-}
+  const data = await response.json();
 
+  console.log('statement data', data);
+
+  return data as Statement[];
+}
