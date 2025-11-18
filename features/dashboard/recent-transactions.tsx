@@ -57,7 +57,7 @@ export function TransactionsSection() {
   const entries = statement || [];
 
   return (
-    <Card className="p-4 px-10 pb-8 max-h-[55vh] overflow-y-auto">
+    <Card className="p-4 px-10 pb-8 max-h-[50vh] overflow-y-auto">
       <h3 className="text-xl font-medium text-black mb-4">
         Transactions récentes
       </h3>

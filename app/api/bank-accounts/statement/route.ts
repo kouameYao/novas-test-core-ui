@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
       headers.Authorization = authHeader;
     }
 
-    const response = await fetch(`${API_BASE_URL}/bank-account/balance`, {
+    const response = await fetch(`${API_BASE_URL}/bank-accounts/statement`, {
       method: 'GET',
       headers
     });
@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
     if (!response.ok) {
       const error = await response.json().catch(() => ({}));
       return NextResponse.json(
-        { error: error.message || 'Erreur lors de la récupération du solde' },
+        { error: error.message || 'Erreur lors de la récupération du relevé' },
         { status: response.status }
       );
     }
@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(data);
   } catch (error) {
     return NextResponse.json(
-      { error: 'Erreur lors de la récupération du solde' },
+      { error: 'Erreur lors de la récupération du relevé' },
       { status: 500 }
     );
   }

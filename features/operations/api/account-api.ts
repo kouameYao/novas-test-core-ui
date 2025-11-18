@@ -21,7 +21,7 @@ export async function getBalance(): Promise<AccountBalance> {
     headers.Authorization = `Bearer ${token}`;
   }
 
-  const response = await fetch('/api/bank-account/balance', {
+  const response = await fetch('/api/bank-accounts/balance', {
     method: 'GET',
     headers
   });
@@ -62,7 +62,7 @@ export async function deposit(
     headers.Authorization = `Bearer ${token}`;
   }
 
-  const response = await fetch('/api/bank-account/deposit', {
+  const response = await fetch('/api/bank-accounts/deposit', {
     method: 'POST',
     headers,
     body: JSON.stringify(request)
@@ -99,7 +99,7 @@ export async function withdraw(
     headers.Authorization = `Bearer ${token}`;
   }
 
-  const response = await fetch('/api/bank-account/withdraw', {
+  const response = await fetch('/api/bank-accounts/withdraw', {
     method: 'POST',
     headers,
     body: JSON.stringify(request)
@@ -134,7 +134,7 @@ export async function getStatement(): Promise<Statement[]> {
     headers.Authorization = `Bearer ${token}`;
   }
 
-  const response = await fetch('/api/bank-account/statement', {
+  const response = await fetch('/api/bank-accounts/statement', {
     method: 'GET',
     headers
   });
