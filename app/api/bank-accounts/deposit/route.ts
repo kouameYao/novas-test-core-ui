@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
       headers.Authorization = authHeader;
     }
 
-    const response = await fetch(`${API_BASE_URL}/bank-account/withdraw`, {
+    const response = await fetch(`${API_BASE_URL}/bank-accounts/deposit`, {
       method: 'POST',
       headers,
       body: JSON.stringify(body)
@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
     if (!response.ok) {
       const error = await response.json().catch(() => ({}));
       return NextResponse.json(
-        { error: error.message || 'Erreur lors du retrait' },
+        { error: error.message || 'Erreur lors du dépôt' },
         { status: response.status }
       );
     }
@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(data);
   } catch (error) {
     return NextResponse.json(
-      { error: 'Erreur lors du retrait' },
+      { error: 'Erreur lors du dépôt' },
       { status: 500 }
     );
   }
