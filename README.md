@@ -14,7 +14,7 @@ Application web moderne de gestion de compte bancaire et de transactions, constr
 - [Tests](#tests)
 - [Déploiement](#déploiement)
 
-## 🔧 Prérequis
+## Prérequis
 
 Avant de commencer, assurez-vous d'avoir installé :
 
@@ -43,7 +43,7 @@ Avant de commencer, assurez-vous d'avoir installé :
    API_BASE_URL=http://localhost:8080
    ```
 
-## ⚙️ Configuration
+## Configuration
 
 ### Variables d'environnement
 
@@ -95,7 +95,7 @@ yarn lint
 yarn format
 ```
 
-## 🏗️ Choix techniques et architecturaux
+## Choix techniques et architecturaux
 
 ### Framework et outils principaux
 
@@ -336,19 +336,6 @@ parse-amount.test.ts
 - **Vercel Analytics** : Intégré pour le suivi des performances
 - **React Query DevTools** : Disponible en développement
 
-## Contribution
-
-1. Créez une branche pour votre feature (`git checkout -b feature/AmazingFeature`)
-2. Commitez vos changements (`yarn commit`)
-3. Poussez vers la branche (`git push origin feature/AmazingFeature`)
-4. Ouvrez une Pull Request
-
-## 📄 Licence
-
-Ce projet est privé et non licencié.
-
----
-
-## 👥 Auteur
+## Auteur
 
 Par [kouameYao](https://github.com/kouameYao/).
