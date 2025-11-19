@@ -14,7 +14,7 @@ Application web moderne de gestion de compte bancaire et de transactions, constr
 - [Tests](#tests)
 - [Déploiement](#déploiement)
 
-## 🔧 Prérequis
+## Prérequis
 
 Avant de commencer, assurez-vous d'avoir installé :
 
@@ -43,7 +43,7 @@ Avant de commencer, assurez-vous d'avoir installé :
    API_BASE_URL=http://localhost:8080
    ```
 
-## ⚙️ Configuration
+## Configuration
 
 ### Variables d'environnement
 
@@ -93,55 +93,9 @@ yarn lint
 
 # Formater le code
 yarn format
-
-
-## 📁 Structure du projet
-
 ```
 
-core-ui/
-├── app/ # App Router Next.js 14
-│ ├── [local]/ # Routes internationalisées
-│ │ ├── dashboard/ # Page dashboard
-│ │ └── login/ # Page de connexion
-│ ├── api/ # API Routes (proxy backend)
-│ │ ├── auth/ # Routes d'authentification
-│ │ └── bank-account/ # Routes de compte bancaire
-│ └── layout.tsx # Layout racine
-├── components/ # Composants réutilisables
-│ ├── auth/ # Composants d'authentification
-│ ├── common/ # Composants communs
-│ ├── react-hook-form/ # Composants RHF personnalisés
-│ └── ui/ # Composants UI (Shadcn)
-├── features/ # Features organisées par domaine
-│ ├── auth/ # Feature authentification
-│ ├── dashboard/ # Feature dashboard
-│ └── operations/ # Feature opérations bancaires
-├── lib/ # Utilitaires et configurations
-│ ├── get-auth-token.ts # Récupération du token
-│ ├── react-query.ts # Configuration React Query
-│ └── utils.ts # Utilitaires généraux
-├── providers/ # Providers React
-│ ├── react-query-provider.tsx
-│ └── providers-wrapper.tsx
-├── shared/ # Composants partagés
-│ └── header.tsx # Header de l'application
-├── store/ # State management (Zustand)
-│ ├── auth-store.ts # Store d'authentification
-│ └── ui-store.ts # Store UI
-├── types/ # Types TypeScript globaux
-├── utils/ # Fonctions utilitaires
-│ ├── format-date.ts
-│ ├── format-number.ts
-│ └── parse-amount.ts
-├── middleware.ts # Middleware Next.js (i18n + routing)
-└── public/ # Assets statiques
-├── fonts/ # Polices personnalisées
-└── icons/ # Icônes SVG
-
-```
-
-## 🏗️ Choix techniques et architecturaux
+## Choix techniques et architecturaux
 
 ### Framework et outils principaux
 
@@ -235,15 +189,6 @@ core-ui/
   - Cohésion fonctionnelle
   - Facilite la maintenance et les tests
 - **Structure** :
-```
-
-features/
-auth/
-api/ # Appels API
-components/ # Composants spécifiques
-types/ # Types TypeScript
-
-````
 
 #### **API Proxy Pattern**
 
@@ -320,16 +265,16 @@ types/ # Types TypeScript
 
 ## Scripts disponibles
 
-| Script               | Description                                |
-| -------------------- | ------------------------------------------ |
-| `yarn dev`           | Lance le serveur de développement          |
-| `yarn build`         | Construit l'application pour la production |
-| `yarn start`         | Lance le serveur de production             |
-| `yarn lint`          | Vérifie le code avec ESLint                |
-| `yarn format`        | Formate le code avec Prettier              |
-| `yarn commit`        | Crée un commit avec Commitizen             |
-| `yarn test`          | Lance les tests                            |
-| `yarn test:watch`    | Lance les tests en mode watch              |
+| Script            | Description                                |
+| ----------------- | ------------------------------------------ |
+| `yarn dev`        | Lance le serveur de développement          |
+| `yarn build`      | Construit l'application pour la production |
+| `yarn start`      | Lance le serveur de production             |
+| `yarn lint`       | Vérifie le code avec ESLint                |
+| `yarn format`     | Formate le code avec Prettier              |
+| `yarn commit`     | Crée un commit avec Commitizen             |
+| `yarn test`       | Lance les tests                            |
+| `yarn test:watch` | Lance les tests en mode watch              |
 
 ## Tests
 
@@ -341,18 +286,17 @@ yarn test
 
 # Mode watch
 yarn test:watch
+```
 
 ### Structure des tests
 
 Les tests sont organisés dans des dossiers `__tests__` à côté des fichiers sources :
 
-```
 utils/
-  __tests__/
-    format-date.test.ts
-    format-number.test.ts
-    parse-amount.test.ts
-```
+**tests**/
+format-date.test.ts
+format-number.test.ts
+parse-amount.test.ts
 
 ## Déploiement
 
@@ -362,9 +306,10 @@ utils/
    Configurez les variables nécessaires sur votre plateforme de déploiement
 
 2. **Build** :
-   ```bash
+
+```bash
    yarn build
-   ```
+```
 
 ### Vercel (recommandé)
 
@@ -391,22 +336,6 @@ utils/
 - **Vercel Analytics** : Intégré pour le suivi des performances
 - **React Query DevTools** : Disponible en développement
 
-## Contribution
-
-1. Créez une branche pour votre feature (`git checkout -b feature/AmazingFeature`)
-2. Commitez vos changements (`yarn commit`)
-3. Poussez vers la branche (`git push origin feature/AmazingFeature`)
-4. Ouvrez une Pull Request
-
-## 📄 Licence
-
-Ce projet est privé et non licencié.
-
----
-
-
-## 👥 Auteur
+## Auteur
 
 Par [kouameYao](https://github.com/kouameYao/).
-
-````
